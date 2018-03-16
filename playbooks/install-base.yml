@@ -1,0 +1,8 @@
+- hosts:
+  - debian
+  roles:
+    - debian-base
+    - role: tersmitten.swapfile
+      swapfile_size: 4GB
+      swapfile_swappiness: 10
+    - debian-docker

@@ -1,0 +1,37 @@
+---
+- name: Install Docker debian packages dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+    - python-pip
+
+- name: Add Docker Debian source list
+  template:
+    src: docker.list
+    dest: /etc/apt/sources.list.d/docker.list
+  register: docker_source
+
+- name: Add Docker key
+  apt_key:
+    id:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  tags:
+    - docker-apt-key
+
+- name: Update cache
+  apt:
+    update_cache: yes
+  when: docker_source.changed
+
+- name: Install docker-engine
+  apt: name=docker-ce state=present
+  tags:
+    - docker-packages
+
+- name: Install docker-compose
+  pip: name=docker-compose state=present

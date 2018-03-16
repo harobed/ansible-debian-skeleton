@@ -1,0 +1,6 @@
+- name: Debian Upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+  tags:
+    - packages

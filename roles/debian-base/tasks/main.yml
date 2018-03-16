@@ -1,0 +1,25 @@
+---
+- include_tasks: scaleway.yml
+- include_tasks: upgrade.yml
+- include_tasks: security.yml
+  tags:
+    - security
+
+- name: Configure locales
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - en_US.UTF-8
+    - fr_FR.UTF-8
+
+- name: Install Ansibles Debian packages
+  apt: name={{ item }} state=present
+  with_items:
+    - python-pip
+
+- name: Install some cozy packages
+  apt: name={{ item }} state=present
+  with_items:
+    - vim
+    - mc
